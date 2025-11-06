@@ -1,0 +1,1 @@
+tailwindcss --output lib/requestkit/templates/index.css --minify
