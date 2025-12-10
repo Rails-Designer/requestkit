@@ -43,11 +43,18 @@ module Requestkit
       when ["/", "GET"]
         Render.html(request, @db, @config)
       when ["/send", "POST"]
-        Request.send(database: @db, namespace: "test")
+        query_parameters = Render.send(:query_params, from: request.path)
+        namespace = query_parameters["namespace"] || "test"
+        name = query_parameters["name"] || "default"
 
-        notify!
+        success = Request.send(database: @db, namespace: namespace, name: name)
 
-        Protocol::HTTP::Response[200, {"content-type" => "text/plain"}, ["Request sent!"]]
+        if success
+          notify!
+          Protocol::HTTP::Response[303, {"location" => "/"}, []]
+        else
+          Protocol::HTTP::Response[400, {"content-type" => "text/plain"}, ["Failed to send request"]]
+        end
       when ["/index.css", "GET"]
         Render.css
       when ["/clear", "POST"]

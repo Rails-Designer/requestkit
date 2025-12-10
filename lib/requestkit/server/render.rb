@@ -2,6 +2,8 @@
 
 require "erb"
 
+require "requestkit/server/request"
+
 module Requestkit
   class Server
     class Render
@@ -13,6 +15,7 @@ module Requestkit
           context = {
             requests: selected_namespace ? database.by_namespace(selected_namespace) : database.all,
             namespaces: database.namespaces,
+            saved_requests: Request.all_saved,
             selected_namespace: selected_namespace
           }
 

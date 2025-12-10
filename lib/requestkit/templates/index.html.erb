@@ -4,97 +4,155 @@
   <title>Requestkit</title>
   <meta charset="utf-8">
   <link href="/index.css" rel="stylesheet" />
+
   <script defer src="https://cdn.jsdelivr.net/npm/attractivejs@latest"></script>
 </head>
 
 <body class="bg-gray-100">
-  <div class="max-w-5xl mx-auto px-2 py-4 bg-white rounded-b-md">
-    <div class="flex items-center justify-between">
-      <% if namespaces.any? %>
-        <form method="get" action="/" id="namespace" class="inline-flex">
-          <select name="namespace" data-action="form#submit" data-target="#namespace" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md transition hover:bg-gray-200">
-            <option value="">All namespaces</option>
+  <div class="max-w-7xl mx-auto px-2 py-4 grid grid-cols-12 gap-4">
+    <div class="col-span-12 bg-white rounded-md p-4 md:col-span-8">
+      <div class="flex items-center justify-between">
+        <% if namespaces.any? %>
+          <form method="get" action="/" id="namespace" class="inline-flex">
+            <select name="namespace" data-action="form#submit" data-target="#namespace" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md transition hover:bg-gray-200">
+              <option value="">All namespaces</option>
 
-            <% namespaces.each do |namespace| %>
-              <option value="<%= namespace %>" <%= 'selected' if selected_namespace == namespace %>><%= namespace %></option>
-            <% end %>
-          </select>
-        </form>
-      <% end %>
-
-      <div class="flex items-center justify-end gap-x-2 [&_svg]:size-3.5">
-        <a href="/" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md transition hover:bg-gray-200">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64l-.25-.24a80,80,0,1,0-1.67,114.78,8,8,0,0,1,11,11.63A95.44,95.44,0,0,1,128,224h-1.32A96,96,0,1,1,195.75,60L224,85.8V56a8,8,0,1,1,16,0Z"/></svg>
-
-          Refresh
-        </a>
-
-        <% unless requests.empty? %>
-          <form method="post" action="/clear">
-            <button type="submit" data-action="confirm" data-confirm-message="Clear all requests?" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md cursor-pointer transition hover:bg-red-200 hover:text-red-700">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
-
-              Clear
-            </button>
+              <% namespaces.each do |namespace| %>
+                <option value="<%= namespace %>" <%= 'selected' if selected_namespace == namespace %>><%= namespace %></option>
+              <% end %>
+            </select>
           </form>
         <% end %>
+
+        <div class="flex items-center justify-end gap-x-2 [&_svg]:size-3.5">
+          <a href="/" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md transition hover:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64l-.25-.24a80,80,0,1,0-1.67,114.78,8,8,0,0,1,11,11.63A95.44,95.44,0,0,1,128,224h-1.32A96,96,0,1,1,195.75,60L224,85.8V56a8,8,0,1,1,16,0Z"/></svg>
+
+            Refresh
+          </a>
+
+          <% unless requests.empty? %>
+            <form method="post" action="/clear">
+              <button type="submit" data-action="confirm" data-confirm-message="Clear all requests?" class="inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-normal text-gray-600 bg-gray-100 rounded-md cursor-pointer transition hover:bg-red-200 hover:text-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
+
+                Clear
+              </button>
+            </form>
+          <% end %>
+        </div>
       </div>
+
+      <% if requests.empty? %>
+        <p class="mt-3 text-sm text-gray-500">
+          No webhooks received yet. Send a request to any endpoint.
+        </p>
+      <% else %>
+        <table class="w-full mt-4 border-collapse">
+          <thead>
+            <tr class="rounded-t-md *:px-4 *:py-1 *:text-left *:text-xs *:font-semibold *:text-gray-500">
+              <th>#</th>
+
+              <th>Method</th>
+
+              <th>Path</th>
+
+              <th>Time</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% requests.each do |request| %>
+              <% request_data = JSON.parse(request["request"]) %>
+              <tr data-action="toggleAttribute#open" data-target="#details-<%= request["id"] %>" class="*:px-4 *:py-2 *:text-sm has-[+tr[open]]:bg-gray-50 hover:bg-gray-50">
+                <td><%= request["id"] %></td>
+
+                <td class="flex items-center gap-x-1.5 text-[0.675rem] font-medium [&_svg]:size-4 [&_svg]:shrink-0 <%= 'text-red-700' if request["status"] && !(200..299).include?(request["status"].to_i) %>">
+                  <% if request["direction"] == "outbound" %>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M178.34,165.66,160,147.31V208a8,8,0,0,1-16,0V147.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0l32,32a8,8,0,0,1-11.32,11.32ZM160,40A88.08,88.08,0,0,0,81.29,88.68,64,64,0,1,0,72,216h40a8,8,0,0,0,0-16H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.12A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,100.8,66,8,8,0,0,0,3.2,15.34,7.9,7.9,0,0,0,3.2-.68A88,88,0,0,0,160,40Z"/></svg>
+                  <% else %>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M248,128a87.34,87.34,0,0,1-17.6,52.81,8,8,0,1,1-12.8-9.62A71.34,71.34,0,0,0,232,128a72,72,0,0,0-144,0,8,8,0,0,1-16,0,88,88,0,0,1,3.29-23.88C74.2,104,73.1,104,72,104a48,48,0,0,0,0,96H96a8,8,0,0,1,0,16H72A64,64,0,1,1,81.29,88.68,88,88,0,0,1,248,128Zm-69.66,42.34L160,188.69V128a8,8,0,0,0-16,0v60.69l-18.34-18.35a8,8,0,0,0-11.32,11.32l32,32a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>
+                  <% end %>
+
+                  <%= request["method"] %>
+                </td>
+
+                <td>
+                  <code class="text-xs bg-gray-200/60 px-2 py-1 rounded-sm">
+                    <%= request["path"] %>
+                  </code>
+                </td>
+
+                <td class="text-xs"><%= request["timestamp"] %></td>
+              </tr>
+
+              <tr id="details-<%= request["id"] %>" class="hidden w-full bg-gray-50 [[open]]:table-row">
+                <td colspan="5" class="px-2 py-3">
+                  <section>
+                    <h4 class="font-medium text-sm text-gray-800">
+                      Headers
+                    </h4>
+                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= JSON.pretty_generate(request_data["headers"]) %></pre>
+
+                    <h4 class="mt-4 font-medium text-sm text-gray-800">
+                      Body
+                    </h4>
+                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request_data["body"].empty? ? "(empty)" : request_data["body"] %></pre>
+
+                    <% if request["response"] %>
+                      <% response_data = JSON.parse(request["response"]) %>
+
+                      <h4 class="mt-4 font-medium text-sm text-gray-800">Response Status</h4>
+                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request["status"] %></pre>
+
+                      <h4 class="mt-4 font-medium text-sm text-gray-800">Response Headers</h4>
+                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= JSON.pretty_generate(response_data["headers"]) %></pre>
+
+                      <h4 class="mt-4 font-medium text-sm text-gray-800">Response Body</h4>
+                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= response_data["body"].empty? ? "(empty)" : response_data["body"] %></pre>
+                    <% end %>
+                  </section>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
 
-    <% if requests.empty? %>
-      <p class="mt-3 text-sm text-gray-500">
-        No webhooks received yet. Send a request to any endpoint.
-      </p>
-    <% else %>
-      <table class="w-full mt-4 border-collapse">
-        <thead>
-          <tr class="rounded-t-md *:px-4 *:py-1 *:text-left *:text-xs *:font-semibold *:text-gray-500">
-            <th>#</th>
+    <div class="col-span-12 bg-white rounded-md p-4 md:col-span-4">
+      <h2 class="text-base font-bold">Outbound Requests</h2>
 
-            <th>Method</th>
+      <% if saved_requests.empty? %>
+        <p class="mt-4 text-sm text-gray-500">No saved requests found. Create JSON files in <code>.requestkit/requests/:namespace/:name.json</code></p>
+      <% else %>
+        <ul class="mt-4">
+          <% saved_requests.each do |namespace, requests| %>
+            <li class="mb-4">
+              <h3 class="text-sm font-semibold text-gray-700"><%= namespace %></h3>
 
-            <th>Path</th>
+              <div class="mt-2 space-y-2">
+                <% requests.each do |request| %>
+                  <div class="flex items-center justify-between px-2 py-0.5 bg-gray-50 rounded-md">
+                    <div class="flex-1">
+                      <div class="text-sm font-medium"><%= request["name"] %></div>
 
-            <th>Time</th>
-          </tr>
-        </thead>
+                      <div class="text-xs text-gray-500"><%= request["url"] %></div>
+                    </div>
 
-        <tbody>
-          <% requests.each do |request| %>
-            <% request_data = JSON.parse(request["request"]) %>
-            <tr data-action="toggleAttribute#open" data-target="#details-<%= request["id"] %>" class="*:px-4 *:py-2 *:text-sm has-[+tr[open]]:bg-gray-50 hover:bg-gray-50">
-              <td><%= request["id"] %></td>
-
-              <td class="text-xs font-medium"><%= request["method"] %></td>
-
-              <td>
-                <code class="text-xs bg-gray-200/60 px-2 py-1 rounded-sm">
-                  <%= request["path"] %>
-                </code>
-              </td>
-
-              <td class="text-xs"><%= request["timestamp"] %></td>
-            </tr>
-
-            <tr id="details-<%= request["id"] %>" class="hidden w-full bg-gray-50 [[open]]:table-row">
-              <td colspan="5" class="px-2 py-3">
-                <section>
-                  <h4 class="font-medium text-sm text-gray-800">
-                    Headers
-                  </h4>
-                  <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= JSON.pretty_generate(request_data["headers"]) %></pre>
-
-                  <h4 class="mt-4 font-medium text-sm text-gray-800">
-                    Body
-                  </h4>
-                  <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request_data["body"].empty? ? "(empty)" : request_data["body"] %></pre>
-                </section>
-              </td>
-            </tr>
+                    <form method="post" action="/send?namespace=<%= namespace %>&name=<%= request["name"] %>" class="inline">
+                      <button type="submit" class="px-3 py-1 text-[.675rem] font-medium text-white bg-blue-500 rounded-sm hover:bg-blue-600">
+                        <%= request["method"] %>
+                      </button>
+                    </form>
+                  </div>
+                <% end %>
+              </div>
+            </li>
           <% end %>
-        </tbody>
-      </table>
-    <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
 
   <script>
@@ -144,3 +202,5 @@
   </script>
 </body>
 </html>
+
+<!-- Icons by https://phosphoricons.com/ -->
