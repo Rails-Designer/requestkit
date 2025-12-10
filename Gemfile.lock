@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    requestkit (0.5.0)
+    requestkit (0.6.0)
       async-http (~> 0.90)
       sqlite3 (~> 2.7)
 
