@@ -42,14 +42,14 @@ curl -X POST http://localhost:4000/stripe/webhook \
 Open `http://localhost:4000` in your browser to see all captured requests with headers and body.
 
 
-### Custom Port
+### Custom port
 
 ```bash
 requestkit --port 8080
 ```
 
 
-### Persistent Storage
+### Persistent storage
 
 By default, requests are stored in memory and cleared when you stop the server. Use file storage to persist across restarts:
 ```bash
@@ -59,7 +59,7 @@ requestkit --storage file
 Requests are saved to `~/.config/requestkit/requestkit.db`.
 
 
-### Custom Database Path
+### Custom database path
 
 ```bash
 requestkit --storage file --database-path ./my-project.db
@@ -71,14 +71,12 @@ requestkit --storage file --database-path ./my-project.db
 Create a configuration file to set defaults:
 
 **User-wide settings** (`~/.config/requestkit/config.yml`):
-
 ```yaml
 port: 5000
 storage: file
 ```
 
 **Project-specific settings** (`./.requestkit.yml`):
-
 ```yaml
 storage: memory
 default_namespace: my-rails-app
@@ -87,7 +85,7 @@ default_namespace: my-rails-app
 Configuration precedence: CLI flags > project config > user config > defaults
 
 
-### Available Options
+### Available options
 
 | Option | Description | Default |
 |--------|-------------|---------|
@@ -111,6 +109,28 @@ curl http://localhost:4000/github/push-event
 Filter by namespace in the web UI. Requests to `/` use the `default_namespace` from your config.
 
 
+## Sending requests
+
+Create JSON files to send HTTP requests and test your APIs. Requestkit loads request definitions from:
+
+1. `./.requestkit/requests/:namespace/:name.json` (project-specific)
+2. `~/.config/requestkit/requests/:namespace/name.json` (user-wide)
+
+Example: (`.requestkit/requests/api/create-user.json`):
+```json
+{
+  "method": "POST",
+  "url": "http://localhost:3000/api/users",
+
+  "headers": {
+    "Content-Type": "application/json"
+  },
+
+  "body": "{\"name\": \"John Doe\", \"email\": \"john@example.com\"}"
+}
+```
+
+
 ## Help
 
 ```bash
@@ -120,4 +140,4 @@ requestkit help
 
 ## License
 
-Perron is released under the [MIT License](https://opensource.org/licenses/MIT).
+Requestkit is released under the [MIT License](https://opensource.org/licenses/MIT).
