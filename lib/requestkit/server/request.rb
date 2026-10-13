@@ -26,7 +26,7 @@ module Requestkit
           endpoint = ssl_endpoint_for(url)
           client = Async::HTTP::Client.new(endpoint)
 
-          response = client.send(method, URI(url).path, request_data[:headers], request_data[:body])
+          response = client.send(method, URI(url).request_uri, request_data[:headers], request_data[:body])
           response_data = {
             headers: response.headers.to_h,
             body: response.body&.read || ""
