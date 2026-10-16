@@ -158,6 +158,7 @@
   <script>
     new EventSource("/events").onmessage = (eventData) => {
       const request = JSON.parse(eventData.data);
+      const requestData = JSON.parse(request.request);
       const tableBody = document.querySelector("tbody");
 
       if (!tableBody) {
