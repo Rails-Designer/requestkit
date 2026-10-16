@@ -18,7 +18,7 @@
               <option value="">All namespaces</option>
 
               <% namespaces.each do |namespace| %>
-                <option value="<%= namespace %>" <%= 'selected' if selected_namespace == namespace %>><%= namespace %></option>
+                <option value="<%= ERB::Util.h(namespace) %>" <%= 'selected' if selected_namespace == namespace %>><%= ERB::Util.h(namespace) %></option>
               <% end %>
             </select>
           </form>
@@ -74,12 +74,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M248,128a87.34,87.34,0,0,1-17.6,52.81,8,8,0,1,1-12.8-9.62A71.34,71.34,0,0,0,232,128a72,72,0,0,0-144,0,8,8,0,0,1-16,0,88,88,0,0,1,3.29-23.88C74.2,104,73.1,104,72,104a48,48,0,0,0,0,96H96a8,8,0,0,1,0,16H72A64,64,0,1,1,81.29,88.68,88,88,0,0,1,248,128Zm-69.66,42.34L160,188.69V128a8,8,0,0,0-16,0v60.69l-18.34-18.35a8,8,0,0,0-11.32,11.32l32,32a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>
                   <% end %>
 
-                  <%= request["method"] %>
+                  <%= ERB::Util.h(request["method"]) %>
                 </td>
 
                 <td>
                   <code class="text-xs bg-gray-200/60 px-2 py-1 rounded-sm">
-                    <%= request["path"] %>
+                    <%= ERB::Util.h(request["path"]) %>
                   </code>
                 </td>
 
@@ -92,12 +92,12 @@
                     <h4 class="font-medium text-sm text-gray-800">
                       Headers
                     </h4>
-                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= JSON.pretty_generate(request_data["headers"]) %></pre>
+                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= ERB::Util.h(JSON.pretty_generate(request_data["headers"])) %></pre>
 
                     <h4 class="mt-4 font-medium text-sm text-gray-800">
                       Body
                     </h4>
-                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request_data["body"].empty? ? "(empty)" : request_data["body"] %></pre>
+                    <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request_data["body"].empty? ? "(empty)" : ERB::Util.h(request_data["body"]) %></pre>
 
                     <% if request["response"] %>
                       <% response_data = JSON.parse(request["response"]) %>
@@ -106,10 +106,10 @@
                       <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= request["status"] %></pre>
 
                       <h4 class="mt-4 font-medium text-sm text-gray-800">Response Headers</h4>
-                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= JSON.pretty_generate(response_data["headers"]) %></pre>
+                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= ERB::Util.h(JSON.pretty_generate(response_data["headers"])) %></pre>
 
                       <h4 class="mt-4 font-medium text-sm text-gray-800">Response Body</h4>
-                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= response_data["body"].empty? ? "(empty)" : response_data["body"] %></pre>
+                      <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto"><%= response_data["body"].empty? ? "(empty)" : ERB::Util.h(response_data["body"]) %></pre>
                     <% end %>
                   </section>
                 </td>
@@ -158,6 +158,8 @@
   <script>
     new EventSource("/events").onmessage = (eventData) => {
       const request = JSON.parse(eventData.data);
+      const requestData = JSON.parse(request.request);
+      const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => `&#${character.charCodeAt(0)};`);
       const tableBody = document.querySelector("tbody");
 
       if (!tableBody) {
@@ -171,11 +173,11 @@
         <tr data-action="toggleAttribute#open" data-target="#details-${request.id}" class="*:px-4 *:py-2 *:text-sm has-[+tr[open]]:bg-gray-50 hover:bg-gray-50">
           <td>${request.id}</td>
 
-          <td class="text-xs font-medium">${request.method}</td>
+          <td class="text-xs font-medium">${escapeHTML(request.method)}</td>
 
           <td>
             <code class="text-xs bg-gray-200/60 px-2 py-1 rounded-sm">
-              ${request.path}
+              ${escapeHTML(request.path)}
             </code>
           </td>
 
@@ -187,11 +189,11 @@
             <section>
               <h4 class="font-medium text-sm text-gray-800">Headers</h4>
 
-              <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto">${JSON.stringify(requestData.headers, null, 2)}</pre>
+              <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto">${escapeHTML(JSON.stringify(requestData.headers, null, 2))}</pre>
 
               <h4 class="mt-4 font-medium text-sm text-gray-800">Body</h4>
 
-              <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto">${requestData.body || "(empty)"}</pre>
+              <pre class="text-xs bg-white p-3 rounded-sm border border-gray-200 overflow-x-auto">${escapeHTML(requestData.body || "(empty)")}</pre>
             </section>
           </td>
         </tr>
